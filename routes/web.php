@@ -183,6 +183,7 @@ Route::resource("jabatan", JabatanController::class)->middleware('can:isAdmin');
 
 //support Jenisdok
 Route::get('/jenisdok/list', [JenisdokController::class, 'list'])->name('jenisdok.list')->middleware('can:isAdmin');
+Route::post('/jenisdok/create', [JenisdokController::class, 'create'])->name('jenisdok.create')->middleware('can:AdminAndRT');
 Route::get('/jenisdok/edit/{id}', [JenisdokController::class, 'edit'])->middleware('can:isAdmin');
 Route::get('/jenisdok/delete/{pangkat:id}', [JenisdokController::class, 'destroy'])->name('jenisdok.delete')->middleware('can:isAdmin');
 Route::resource("jenisdok", JenisdokController::class)->middleware('can:isAdmin');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Jenisdok;
+use Illuminate\Support\Facades\Validator;
 use DataTables;
 
 class JenisdokController extends Controller
@@ -24,15 +25,32 @@ class JenisdokController extends Controller
 
     public function list()
     {
-        $jenisdok = jenisdok::all();
+        $jenisdok = Jenisdok::all();
         return Datatables::of($jenisdok)
             ->addIndexColumn()
             ->addColumn('action', function($opsi) {
-                $action = '<a class="btn btn-success shadow btn-xs sharp mr-1" href="'.route('jenisdok.details',$opsi->id).'"><i class="fa fa-info-circle" title="Details"></i></a>';
+                $action = '<a class="btn btn-success shadow btn-xs sharp mr-1" href="#"><i class="fa fa-info-circle" title="Details"></i></a>';
                 $action .= '<a class="btn btn-primary shadow btn-xs sharp mr-1" href="'.route('jenisdok.edit',$opsi->id).'"><i class="fa fa-pencil" title="Edit"></i></a>';
                 $action .= '<a class="btn btn-danger shadow btn-xs sharp mr-1" class="button delete-confirm" href="'.route('jenisdok.delete',$opsi->id).'"><i class="fa fa-trash" title="Hapus"></i></a>';
                 return $action;})
             ->make();
+    }
+
+      public function create(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            "nama_dokumen" => "required|min:3|unique:jenis_dok",
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('jenisdok.index')->with('error', 'Data gagal ditambah')->withErrors($validator)->withInput();
+        }
+
+        $jenisdok = new Jenisdok();
+        $jenisdok->nama_dokumen = $request->get('nama_dokumen');
+        $jenisdok->save();
+        return redirect()->route('jenisdok.index')->with('status', 'Data berhasil ditambahkan.');
+
     }
 
     /**
@@ -66,7 +84,7 @@ class JenisdokController extends Controller
     public function store(Request $request)
     {
         $new_jenisdok = new \App\Models\Jenisdok;
-        $new_jenisdok->nama_jenisdok = $request->get('nama_jenisdok');
+        $new_jenisdok->nama_dokumen = $request->get('nama_dokumen');
         $new_jenisdok->save();
         return redirect()->route('jenisdok.index')->with('status', 'Nama jenisdok successfully created.');
     }
@@ -104,7 +122,7 @@ class JenisdokController extends Controller
     public function update(Request $request, $id)
     {
         $jenisdok = \App\Models\Jenisdok::findOrFail($id);
-        $jenisdok->nama_jenisdok = $request->get('nama_jenisdok');
+        $jenisdok->nama_dokumen = $request->get('nama_dokumen');
         $jenisdok->save();
         return redirect()->route('jenisdok.index')->with('status', 'Nama jenisdok successfully updated.');
     }

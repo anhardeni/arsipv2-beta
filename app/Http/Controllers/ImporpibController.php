@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use App\Imports\PibImport;
+use App\Imports\Bc25Import;
 use App\Models\Pib;
 use App\Models\Pendok;
 use Maatwebsite\Excel\Facades\Excel;
@@ -109,7 +110,7 @@ class ImporpibController extends Controller
 
             $file->move('file_impor', $nama_file);
 
-            Excel::import(new PibImport, public_path('/file_impor/' . $nama_file));
+            Excel::import(new Bc25Import, public_path('/file_impor/' . $nama_file));
 
             Session::flash('sukses', 'Data bc25 berhasil diimpor');
 
@@ -228,7 +229,7 @@ class ImporpibController extends Controller
                 $tgl_tt = $pib->tgl_tt;
                 $jalur = $pib->jalur;
                 $nm_terima = $pib->nm_terima;
-                $jenisdok = $pib->jenisdok;
+                $jenisdok = 4;
 
                 $pib = Pendok::byNomorTanggal($no_pib, $tgl_pib)->count();
                 if($pib > 0){

@@ -62,7 +62,7 @@
 <body>
 
     <header>
-        <h1>BATCHING DOKUMEN PIB</h1>
+        <h1>BATCHING DOKUMEN </h1>
         <h3>{{ $batch->no_batch }} TANGGAL {{ \Carbon\Carbon::parse($batch->tanggal_batch)->format('d-m-Y') }}</h3>
     </header>
 
@@ -70,7 +70,8 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nomor PIB</th>
+                <th>Jenis Dok</th>
+                <th>Nomor Dok</th>
                 <th>Tanggal</th>
                 <th>Nama Importir</th>
                 <th>Jalur</th>
@@ -81,6 +82,7 @@
             @foreach($batch_p as $btc)
             <tr>
                 <td>{{ $no++ }}</td>
+                <td>{{ $btc->jenisdok }}</td>
                 <td>{{ $btc->no_pib }}</td>
                 <td>{{ $btc->tgl_pib }}</td>
                 <td>{{ $btc->importir }}</td>
